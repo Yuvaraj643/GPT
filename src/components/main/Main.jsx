@@ -32,6 +32,16 @@ const Main = () => {
     setShowLogout(!showLogout);
   };
 
+  const RequestData = () => {
+    onSent("");
+    setInput("");
+    setShowLogout(false);
+    fetch("/api/reet")
+      .then((res) => res.json())
+      .then((data) =>
+        resultData = data);
+  };
+
   return (
     <div className="main">
       <div className="nav">
@@ -39,7 +49,10 @@ const Main = () => {
         <div className="user-container" onClick={toggleLogoutMenu}>
           <img src={assets.user} alt="User" className="user-image" />
           {showLogout && (
-            <div className="logout-menu" style={{ position: "absolute", top: "70px", right: "19px" }}>
+            <div
+              className="logout-menu"
+              style={{ position: "absolute", top: "70px", right: "19px" }}
+            >
               <button
                 style={{
                   width: "100%",
@@ -119,7 +132,12 @@ const Main = () => {
                 placeholder="Enter the Prompt Here...."
               />
               <div>
-                <button type="submit" style={{ border: "none" }}>
+                <button
+                  type="submit"
+                  disabled={!input}
+                  onClick={RequestData}
+                  style={{ border: "none" }}
+                >
                   <img src={assets.send_icon} alt="Send" />
                 </button>
               </div>
