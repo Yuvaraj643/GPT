@@ -4,6 +4,7 @@ import "./main.css";
 import { Context } from "../../context/Context";
 import authService from "../../authService";
 import { useNavigate } from "react-router-dom";
+import Chat from "../Chat/Chat";
 
 const Main = () => {
   const {
@@ -14,6 +15,7 @@ const Main = () => {
     resultData,
     setInput,
     input,
+    setResultData
   } = useContext(Context);
   const [showLogout, setShowLogout] = useState(false);
   const navigate = useNavigate();
@@ -32,15 +34,7 @@ const Main = () => {
     setShowLogout(!showLogout);
   };
 
-  const RequestData = () => {
-    onSent("");
-    setInput("");
-    setShowLogout(false);
-    fetch("/api/reet")
-      .then((res) => res.json())
-      .then((data) =>
-        resultData = data);
-  };
+ 
 
   return (
     <div className="main">
@@ -72,55 +66,13 @@ const Main = () => {
         </div>
       </div>
       <div className="main-container">
-        {!showResults ? (
-          <>
-            <div className="greet">
-              <p>
-                <span>Welcome</span>
-              </p>
-              <p>How Can I Help You Today?</p>
-            </div>
-          </>
-        ) : (
-          <div className="result">
-            {loading ? (
-              <div className="loader">
-                <hr />
-                <hr />
-                <hr />
-              </div>
-            ) : (
-              resultData.map((message, index) => (
-                <>
-                  <div
-                    className="result-data"
-                    style={{ display: "flex", flexDirection: "column" }}
-                  >
-                    <div className="humanMessage">
-                      <p
-                        key={index}
-                        style={{ marginTop: "30px", marginLeft: "40px" }}
-                      >
-                        {message.human}
-                      </p>
-                    </div>
-                    <div
-                      className="sysMeaasge"
-                      style={{ display: "flex", flexDirection: "row" }}
-                    >
-                      <img src={assets.gemini_icon} alt="" />
-                      <p key={index}>{message.ai}</p>
-                    </div>
-                  </div>
-                </>
-              ))
-            )}
-          </div>
-        )}
+        {/*  */}
+        <Chat resultData={resultData} />
+        
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            onSent();
+            onSent(input, setResultData);
           }}
         >
           <div className="main-bottom">
@@ -135,7 +87,6 @@ const Main = () => {
                 <button
                   type="submit"
                   disabled={!input}
-                  onClick={RequestData}
                   style={{ border: "none" }}
                 >
                   <img src={assets.send_icon} alt="Send" />

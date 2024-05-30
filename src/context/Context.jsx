@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
 
 export const Context = createContext();
 
@@ -32,10 +33,11 @@ const ContextProvider = (props) => {
   const [prevPrompts, setPrevPrompts] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [resultData, setResultData] = useState([
-    { ai: "Hello", human: "This is test1" },
-    { ai: "Hi", human: "This is test2" },
-  ]);
+  // const [resultData, setResultData] = useState([
+  //   { ai: "Hello", human: "This is test1" },
+  //   { ai: "Hi", human: "This is test2" },
+  // ]);
+  const [resultData, setResultData] = useState([]);
 
   const newChat = () => {
     setLoading(false);
@@ -51,8 +53,11 @@ const ContextProvider = (props) => {
     }
   };
 
-  const onSent = async (prompt) => {
-    setResultData([]);
+  const onSent = async (prompt,setResultData) => {
+    setResultData([
+      { ai: "Hello", human: "This is test1" },
+      { ai: "Hi", human: "This is test2" },
+    ]);
     setLoading(true);
     setShowResults(true);
     let response;
@@ -72,6 +77,7 @@ const ContextProvider = (props) => {
       setResultData(
         response.messages
       );
+      return <Navigate to="/chat" state={{ resultData }} />;
       
     } catch (error) {
       console.error("Error while running chat:", error);
